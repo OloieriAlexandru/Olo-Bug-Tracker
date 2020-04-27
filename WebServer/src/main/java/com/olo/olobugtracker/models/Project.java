@@ -1,12 +1,14 @@
 package com.olo.olobugtracker.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity(name = "projects")
 public class Project {
     @Id
@@ -15,9 +17,7 @@ public class Project {
 
     @Column(length = 31)
     private String name;
-    
-    private String description;
 
-    public Project() {
-    }
+    @Column
+    private String description;
 }

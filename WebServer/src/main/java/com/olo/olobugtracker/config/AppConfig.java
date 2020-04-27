@@ -1,4 +1,4 @@
-package com.olo.olobugtracker;
+package com.olo.olobugtracker.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
