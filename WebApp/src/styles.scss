@@ -1,5 +1,10 @@
 /* https://github.com/necolas/normalize.css/ */
 
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;

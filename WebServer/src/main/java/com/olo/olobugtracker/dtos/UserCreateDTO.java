@@ -10,6 +10,8 @@ import lombok.Setter;
 public class UserCreateDTO {
     private String username;
     private String password;
+    private String firstName;
+    private String lastName;
 
     public String getPassword() {
         return password;

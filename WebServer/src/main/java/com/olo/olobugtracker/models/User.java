@@ -16,12 +16,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 31, unique = true, nullable = false)
+    @Column(length = 31, name="username", unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
     @JsonIgnore
     private String password;
+
+    @Column(length = 30, name = "first_name")
+    private String firstName;
+
+    @Column(length = 30, name = "last_name")
+    private String lastName;
 
     public void setPassword(String password) {
         this.password = password;

@@ -3,19 +3,19 @@ import { Observable } from 'rxjs';
 
 import { GenericService } from './generic.service';
 
-import { UserNew } from '../models/UserNew';
+import { ProjectGetAll } from '../models/ProjectGetAll';
 
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
-  private URL = environment.baseURL + '/api/v1/users/';
+export class ProjectService {
+  private URL = environment.baseURL + '/api/v1/projects/';
 
   constructor(private baseService: GenericService) {}
 
-  public createUser(user: UserNew): Observable<UserNew> {
-    return this.baseService.post<UserNew>(this.URL, 'register', user);
+  public getAll(): Observable<ProjectGetAll[]> {
+    return this.baseService.get<ProjectGetAll[]>(this.URL, '');
   }
 }

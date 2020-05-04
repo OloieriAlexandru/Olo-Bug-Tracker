@@ -1,3 +1,87 @@
-<div class="olo">
-  Olo Bug Tracker
+<div class="auth-wrapper">
+  <div class="double-widget">
+    <div class="register-widget">
+      <div class="title">
+        Join us <span>to explore more</span>
+      </div>
+      <hr>
+      <div class="subtitle">
+        Join the platform, where you can track the bugs and progress of all the projects you're working on
+      </div>
+      <div class="register-form">
+        <div class="row">
+          <form action="col s12">
+            <div class="message">
+              Enter your details
+            </div>
+            <div class="form-row">
+              <div class="input-field col s6">
+                <input id="first-name-register" type="text" [(ngModel)]="newUser.firstName"
+                  [ngModelOptions]="{standalone: true}">
+                <label for="first-name-register">First name</label>
+              </div>
+              <div class="input-field col s6">
+                <input id="last-name-register" type="text" [(ngModel)]="newUser.lastName"
+                  [ngModelOptions]="{standalone: true}">
+                <label for="last-name-register">Last name</label>
+              </div>
+            </div>
+            <div class="input-field col s12">
+              <input id="username-register" type="text" [(ngModel)]="newUser.username"
+                [ngModelOptions]="{standalone: true}">
+              <label for="username-register">Username</label>
+            </div>
+            <div class="input-field col s12">
+              <input id="password-register" type="text" [(ngModel)]="newUser.password"
+                [ngModelOptions]="{standalone: true}">
+              <label for="password-register">Password</label>
+            </div>
+            <div>
+              <label>
+                <input type="checkbox" />
+                <span class="white-text">I agree with the terms and conditions</span>
+              </label>
+            </div>
+            <div>
+              <a class="waves-effect blue-grey lighten-5 btn" (click)="register()">Register</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="login-widget">
+      <div class="title">
+        Already <span>got an account?</span>
+      </div>
+      <hr>
+      <div class="subtitle">
+        Then you know what's good. Just sign in!
+      </div>
+      <div class="login-form">
+        <div class="row">
+          <form class="col s12">
+            <div class="input-field col s12">
+              <input id="login-username" type="text" [(ngModel)]="userCredentials.username"
+                [ngModelOptions]="{standalone: true}">
+              <label for="login-username">Username</label>
+            </div>
+            <div class="input-field col s12">
+              <input id="login-password" type="password" [(ngModel)]="userCredentials.password"
+                [ngModelOptions]="{standalone: true}">
+              <label for="login-password">Password</label>
+            </div>
+            <div>
+              <label>
+                <input class="checkbox-darken-blue" type="checkbox" />
+                <span class="black-text">Remember me</span>
+              </label>
+            </div>
+            <div>
+              <a class="waves-effect blue darken-4 btn" (click)="signIn()">Sign in</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

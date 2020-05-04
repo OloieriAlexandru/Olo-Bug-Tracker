@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@Angular/forms';
 
+import * as M from 'materialize-css/dist/js/materialize';
+
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +15,7 @@ import { JwtHttpInterceptorService } from './services/jwt-http-interceptor.servi
 import { AuthGuardService } from './services/auth-guard.service';
 import { AuthNotGuardService } from './services/auth-not-guard.service';
 import { UserService } from './services/user.service';
+import { ProjectService } from './services/project.service';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './pages/auth/auth.component';
@@ -41,8 +44,10 @@ export function tokenGetter() {
       useClass: JwtHttpInterceptorService,
       multi: true,
     },
+    { provide: 'M', useValue: M },
     GenericService,
     UserService,
+    ProjectService,
     AuthService,
     AuthGuardService,
     AuthNotGuardService,
