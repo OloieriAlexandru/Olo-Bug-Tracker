@@ -13,15 +13,18 @@ phases:
             - mvn test
             - cd ..
             - REPOSITORY_URI=913042141756.dkr.ecr.eu-west-2.amazonaws.com/olo-bug-tracker-repo
+            - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+            - IMAGE_TAG_SERVER=${COMMIT_HASH:=latest}-server
+            - IMAGE_TAG_WEB_APP=${COMMIT_HASH:=latest}-web-app
     build:
         commands:
             - echo Build started on `date`
             - echo Building the Docker image...
             - cd WebServer
             - mvn -Dmaven.test.skip=true package    
-            - docker build -t $REPOSITORY_URI/server:latest .
+            - docker build -t $REPOSITORY_URI:$IMAGE_TAG_SERVER .
     post_build:
         commands:
             - echo Build completed on `date`
             - echo Pushing the Docker images...
-            - docker push $REPOSITORY_URI/server:latest
+            - docker push $REPOSITORY_URI:$IMAGE_TAG_SERVER
