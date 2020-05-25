@@ -31,3 +31,8 @@ phases:
             - echo Pushing the Docker images...
             - docker push $REPOSITORY_URI:$IMAGE_TAG_SERVER
             - docker push $REPOSITORY_URI:$IMAGE_TAG_WEB_APP
+            - printf '[{"name":"web-app-container","imageUri":"%s"}, {"name":"server-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG_WEB_APP $REPOSITORY_URI:$IMAGE_TAG_SERVER> imagedefinitions.json
+            - cat imagedefinitions.json
+artifacts:
+    files:
+        imagedefinitions.json
