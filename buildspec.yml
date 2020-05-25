@@ -25,6 +25,7 @@ phases:
             - docker build -t $REPOSITORY_URI:$IMAGE_TAG_SERVER .
             - cd ../WebApp
             - docker build -t $REPOSITORY_URI:$IMAGE_TAG_WEB_APP .
+            - cd ..
     post_build:
         commands:
             - echo Build completed on `date`
