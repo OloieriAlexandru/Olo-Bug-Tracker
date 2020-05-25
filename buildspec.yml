@@ -3,7 +3,7 @@ version: 0.2
 phases:
     install:
         runtime-versions:
-            java: corretto8
+            java: openjdk8
     pre_build:
         commands:
             - echo Logging in to Amazon ECR...
@@ -25,4 +25,3 @@ phases:
             - echo Build completed on `date`
             - echo Pushing the Docker images...
             - docker push $REPOSITORY_URI/server:latest
-            
