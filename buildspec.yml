@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+    install:
+        runtime-versions:
+            java: corretto8
+    pre_build:
+        commands:
+            - echo Logging in to Amazon ECR...
+            - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+            - echo Running the server unit tests
+            - cd WebServer
+            - mvn test
+            - cd ..
+            - REPOSITORY_URI=913042141756.dkr.ecr.eu-west-2.amazonaws.com/olo-bug-tracker-repo
+    build:
+        commands:
+            - echo Build started on `date`
+            - echo Building the Docker image...
+            - cd WebServer      
+            - docker build -t $REPOSITORY_URI/server:latest .
+            - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG 
+    postbuild:
+        commands:
+            - echo Build completed on `date`
+            - echo Pushing the Docker images...
+            - docker push $REPOSITORY_URI/server:latest
