@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@Angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import * as M from 'materialize-css/dist/js/materialize';
 

@@ -4,6 +4,7 @@ import com.olo.olobugtracker.dtos.ProjectCreateDTO;
 import com.olo.olobugtracker.dtos.ProjectGetAllDTO;
 import com.olo.olobugtracker.dtos.ProjectGetByIdDTO;
 import com.olo.olobugtracker.dtos.ProjectUpdateDTO;
+import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 import com.olo.olobugtracker.models.Project;
 import com.olo.olobugtracker.repositories.ProjectRepository;
 import com.olo.olobugtracker.services.abstractions.ProjectService;
@@ -18,11 +19,15 @@ import java.util.Optional;
 
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectService {
-    @Autowired
     private ProjectRepository projectRepository;
 
-    @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    public ProjectServiceImpl(ProjectRepository projectRepository, ModelMapper modelMapper) {
+        this.projectRepository = projectRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public List<ProjectGetAllDTO> findAll() {
@@ -37,10 +42,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectGetByIdDTO findById(Long id) {
+    public ProjectGetByIdDTO findById(Long id) throws GenericNotFoundException {
         Optional<Project> project = projectRepository.findById(id);
 
-        return project.map(value -> modelMapper.map(value, ProjectGetByIdDTO.class)).orElse(null);
+        if (!project.isPresent()) {
+            throw new GenericNotFoundException("The project with id " + id + " doesn't exist!");
+        }
+
+        return modelMapper.map(project.get(), ProjectGetByIdDTO.class);
     }
 
     @Override
@@ -53,10 +62,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean update(Long id, ProjectUpdateDTO updatedProject) {
+    public boolean update(Long id, ProjectUpdateDTO updatedProject) throws GenericNotFoundException {
         Optional<Project> projectOpt = projectRepository.findById(id);
         if (!projectOpt.isPresent()) {
-            return false;
+            throw new GenericNotFoundException("The project with id " + id + " doesn't exist!");
         }
 
         Project project = projectOpt.get();
@@ -67,9 +76,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) throws GenericNotFoundException {
         if (!projectRepository.existsById(id)) {
-            return false;
+            throw new GenericNotFoundException("The project with id " + id + " doesn't exist!");
         }
 
         projectRepository.deleteById(id);

@@ -13,14 +13,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
     private PasswordEncoder bCryptEncoder;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder bCryptEncoder) {
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+        this.bCryptEncoder = bCryptEncoder;
+    }
 
     @Override
     public UserCredentialsDTO findByUsername(String username) {

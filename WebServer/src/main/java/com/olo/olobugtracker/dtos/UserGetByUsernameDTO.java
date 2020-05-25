@@ -10,5 +10,4 @@ import lombok.Setter;
 public class UserGetByUsernameDTO {
     private Long id;
     private String username;
-    private String password;
 }

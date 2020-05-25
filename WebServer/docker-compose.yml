@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+    users-server:
+        build: ./
+        image: alexoloieri/bug-tracker-server
+        container_name: olo-bug-tracker-server
+        restart: always          
+        environment:
+            - DB_USERNAME=postgres
+            - DB_PASSWORD=password
+            - DB_URL=jdbc:postgresql://olo-bug-tracker-db.cdfdfkyi1qx0.eu-west-2.rds.amazonaws.com/olo-bug-tracker-db
+            - JWT_SECRET=573ef5d8ad5787c34b3a4b1917cca3c3ef4455425d815620bbf66854e73d37e094f2a53679154ad43a4ba4ce42eb5822168a8ad5a30fff717eb4afcca42cb1b5
+            - DB_INIT_TYPE=update
+        ports:
+            - '9001:9000'
+            
