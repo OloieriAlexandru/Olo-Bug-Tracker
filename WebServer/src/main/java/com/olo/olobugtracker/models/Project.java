@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity(name = "projects")
 public class Project {
     @Id
@@ -20,4 +19,18 @@ public class Project {
 
     @Column
     private String description;
+
+    public Project() {
+    }
+
+    public Project(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Project(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
 }

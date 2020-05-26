@@ -4,6 +4,7 @@ import com.olo.olobugtracker.dtos.ProjectCreateDTO;
 import com.olo.olobugtracker.dtos.ProjectGetAllDTO;
 import com.olo.olobugtracker.dtos.ProjectGetByIdDTO;
 import com.olo.olobugtracker.dtos.ProjectUpdateDTO;
+import com.olo.olobugtracker.exceptions.GenericDuplicateException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 import com.olo.olobugtracker.models.Project;
 import com.olo.olobugtracker.repositories.ProjectRepository;
@@ -53,7 +54,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectGetByIdDTO create(ProjectCreateDTO newProject) {
+    public ProjectGetByIdDTO create(ProjectCreateDTO newProject) throws GenericDuplicateException {
+        Project optProject = projectRepository.findByName(newProject.getName());
+
+        if (optProject != null) {
+            throw new GenericDuplicateException("A project with the name \"" + newProject.getName() + "\" already exists!");
+        }
+
         Project project = modelMapper.map(newProject, Project.class);
 
         project = projectRepository.save(project);
@@ -62,7 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean update(Long id, ProjectUpdateDTO updatedProject) throws GenericNotFoundException {
+    public void update(Long id, ProjectUpdateDTO updatedProject) throws GenericNotFoundException {
         Optional<Project> projectOpt = projectRepository.findById(id);
         if (!projectOpt.isPresent()) {
             throw new GenericNotFoundException("The project with id " + id + " doesn't exist!");
@@ -71,17 +78,14 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectOpt.get();
         BeanUtils.copyProperties(updatedProject, project);
         projectRepository.save(project);
-
-        return true;
     }
 
     @Override
-    public boolean delete(Long id) throws GenericNotFoundException {
+    public void delete(Long id) throws GenericNotFoundException {
         if (!projectRepository.existsById(id)) {
             throw new GenericNotFoundException("The project with id " + id + " doesn't exist!");
         }
 
         projectRepository.deleteById(id);
-        return true;
     }
 }

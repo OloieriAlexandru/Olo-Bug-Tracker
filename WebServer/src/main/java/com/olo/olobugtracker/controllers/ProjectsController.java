@@ -4,6 +4,7 @@ import com.olo.olobugtracker.dtos.ProjectCreateDTO;
 import com.olo.olobugtracker.dtos.ProjectGetAllDTO;
 import com.olo.olobugtracker.dtos.ProjectGetByIdDTO;
 import com.olo.olobugtracker.dtos.ProjectUpdateDTO;
+import com.olo.olobugtracker.exceptions.GenericDuplicateException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 import com.olo.olobugtracker.services.abstractions.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class ProjectsController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectGetByIdDTO> create(@RequestBody ProjectCreateDTO project) {
+    public ResponseEntity<ProjectGetByIdDTO> create(@RequestBody ProjectCreateDTO project) throws GenericDuplicateException {
         ProjectGetByIdDTO createdProject = projectService.create(project);
 
         URI location = ServletUriComponentsBuilder
@@ -50,17 +51,13 @@ public class ProjectsController {
 
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ProjectUpdateDTO project) throws GenericNotFoundException {
-        if (!projectService.update(id, project)) {
-            return ResponseEntity.notFound().build();
-        }
+        projectService.update(id, project);
         return ResponseEntity.noContent().build();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Long id) throws GenericNotFoundException {
-        if (!projectService.delete(id)) {
-            return ResponseEntity.notFound().build();
-        }
+        projectService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

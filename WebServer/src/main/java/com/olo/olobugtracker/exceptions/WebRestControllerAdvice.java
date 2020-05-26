@@ -13,4 +13,10 @@ public class WebRestControllerAdvice {
         GenericErrorDTO errorDTO = new GenericErrorDTO(e.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = GenericDuplicateException.class)
+    public ResponseEntity<?> handleDuplicateExceptions(GenericDuplicateException e) {
+        GenericErrorDTO errorDTO = new GenericErrorDTO((e.getMessage()));
+        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+    }
 }
