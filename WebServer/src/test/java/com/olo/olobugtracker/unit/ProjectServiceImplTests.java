@@ -58,6 +58,6 @@ public class ProjectServiceImplTests {
         ProjectService projectService = new ProjectServiceImpl(projectRepository, new ModelMapper());
 
         ProjectGetByIdDTO returnedDTO = projectService.create(newlyCreatedProject);
-        Assertions.assertNotEquals(returnedDTO, returnedProjectDTO);
+        Assertions.assertEquals(returnedDTO, returnedProjectDTO);
     }
 }
