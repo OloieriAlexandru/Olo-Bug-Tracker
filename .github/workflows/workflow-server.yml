@@ -1,0 +1,56 @@
+name: Server-ci-cd
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/workflow-server.yml"
+      - "WebServer/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./WebServer
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "8"
+
+      - name: Unit & integration tests
+        working-directory: ${{ env.working-directory }}
+        run: mvn test
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./WebServer
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "8"
+
+      - name: Login to Heroku Container registry
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+
+      - name: Build and push the server
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_SERVER_NAME }}
+        working-directory: ${{ env.working-directory }}
+        run: 
+          mvn -Dmaven.test.skip=true package
+          heroku container:push -a ${{ secrets.HEROKU_SERVER_NAME }} web
+
+      - name: Release the app on Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        working-directory: ${{ env.working-directory }}
+        run: heroku container:release -a ${{ secrets.HEROKU_SERVER_NAME }} web

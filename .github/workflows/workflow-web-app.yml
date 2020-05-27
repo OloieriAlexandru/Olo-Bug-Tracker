@@ -1,36 +1,36 @@
 name: Web-app-ci-cd
 
 on:
-    push:
-        branches:
-            - master
-        paths:
-            - '.github/workflows/workflow-web-app.yml'
-            - 'WebApp/**'
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/workflow-web-app.yml"
+      - "WebApp/**"
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./WebApp
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to Heroku Container registry
         env:
-            working-directory: ./WebApp
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
 
-        steps:
-            - uses: actions/checkout@v2
-            
-            - name: Login to Heroku Container registry
-              env:
-                HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-              run: heroku container:login
+      - name: Build and push web app
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_WEB_APP_NAME }}
+        working-directory: ${{ env.working-directory }}
+        run: heroku container:push -a ${{ secrets.HEROKU_WEB_APP_NAME }} web
 
-            - name: Build and push web app
-              env:
-                HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-                HEROKU_APP_NAME: ${{ secrets.HEROKU_WEB_APP_NAME }}
-              working-directory: ${{ env.working-directory }}
-              run: heroku container:push -a ${{ secrets.HEROKU_WEB_APP_NAME }} web
-
-            - name: Release the app on Heroku
-              env:
-                HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-              working-directory: ${{env.working-directory}}
-              run: heroku container:release -a ${{ secrets.HEROKU_WEB_APP_NAME }} web
+      - name: Release the app on Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        working-directory: ${{env.working-directory}}
+        run: heroku container:release -a ${{ secrets.HEROKU_WEB_APP_NAME }} web
