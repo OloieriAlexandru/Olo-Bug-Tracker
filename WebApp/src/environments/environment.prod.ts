@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseURL: 'http://localhost:80',
+  baseURL: 'https://bug-tracker-server.herokuapp.com',
 };
