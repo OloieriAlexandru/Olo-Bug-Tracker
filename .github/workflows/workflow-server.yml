@@ -26,6 +26,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    needs: test
     env:
       working-directory: ./WebServer
 
@@ -45,9 +46,8 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_SERVER_NAME }}
         working-directory: ${{ env.working-directory }}
-        run: 
-          mvn -Dmaven.test.skip=true package
-          heroku container:push -a ${{ secrets.HEROKU_SERVER_NAME }} web
+        run: mvn -Dmaven.test.skip=true package
+        run: heroku container:push -a ${{ secrets.HEROKU_SERVER_NAME }} web
 
       - name: Release the app on Heroku
         env:
