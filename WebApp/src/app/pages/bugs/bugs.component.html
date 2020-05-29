@@ -1,0 +1,22 @@
+<div class="wrapper">
+
+  <div class="bugs-container" *ngIf="bugs; else loadingBar">
+
+  </div>
+
+  <ng-template #loadingBar>
+    <div class="preloader-wrapper active loading-bar">
+      <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,4 @@
+INSERT INTO users_roles VALUES (0, 'OWNER');
+INSERT INTO users_roles VALUES (1, 'DEVELOPER');
+INSERT INTO users_roles VALUES (2, 'TESTER');
+INSERT INTO users_roles VALUES (3, 'DEV_OPS');

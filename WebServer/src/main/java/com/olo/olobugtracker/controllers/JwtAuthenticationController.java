@@ -2,6 +2,7 @@ package com.olo.olobugtracker.controllers;
 
 import com.olo.olobugtracker.dtos.JwtRequestDTO;
 import com.olo.olobugtracker.dtos.JwtResponseDTO;
+import com.olo.olobugtracker.services.abstractions.UserService;
 import com.olo.olobugtracker.services.implementations.JwtUserDetailsService;
 import com.olo.olobugtracker.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class JwtAuthenticationController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private JwtUserDetailsService userDetailsService;
 
     @PostMapping("auth")
@@ -32,7 +36,7 @@ public class JwtAuthenticationController {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
 
-        String token = jwtTokenUtil.generateToken(userDetails);
+        String token = jwtTokenUtil.generateToken(userDetails, userService.getUserId(authRequest.getUsername()));
 
         return ResponseEntity.ok(new JwtResponseDTO(token));
     }

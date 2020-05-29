@@ -48,7 +48,7 @@ export class AuthComponent {
       });
       setTimeout(() => {
         let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-        this.router.navigate([returnUrl || '/']);
+        this.router.navigate([returnUrl || '/app']);
       }, 2000);
     });
   }

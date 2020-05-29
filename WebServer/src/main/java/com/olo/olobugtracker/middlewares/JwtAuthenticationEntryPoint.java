@@ -2,6 +2,7 @@ package com.olo.olobugtracker.middlewares;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException {
-        if (e.getClass().equals(BadCredentialsException.class)) {
+        if (e.getClass().equals(BadCredentialsException.class) || e.getClass().equals(UsernameNotFoundException.class)) {
             httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } else {
             httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");

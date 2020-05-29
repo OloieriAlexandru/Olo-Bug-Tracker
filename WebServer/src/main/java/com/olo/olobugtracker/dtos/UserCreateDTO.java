@@ -1,10 +1,8 @@
 package com.olo.olobugtracker.dtos;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
 @NoArgsConstructor
 public class UserCreateDTO {
@@ -12,6 +10,10 @@ public class UserCreateDTO {
     private String password;
     private String firstName;
     private String lastName;
+
+    public String getUsername() {
+        return username;
+    }
 
     public String getPassword() {
         return password;

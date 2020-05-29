@@ -10,4 +10,9 @@ import lombok.Setter;
 public class ProjectGetAllDTO {
     private Long id;
     private String name;
+    private String shortDescription;
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
 }

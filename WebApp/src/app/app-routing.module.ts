@@ -6,6 +6,8 @@ import { AuthNotGuardService } from './services/auth-not-guard.service';
 
 import { AuthComponent } from './pages/auth/auth.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { BugsComponent } from './pages/bugs/bugs.component';
 
 const routes: Routes = [
   {
@@ -18,13 +20,14 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuardService],
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: HomeComponent },
+      { path: '', redirectTo: 'projects', pathMatch: 'full' },
+      { path: 'projects', component: ProjectsComponent },
+      { path: 'bugs', component: BugsComponent },
     ],
   },
   {
     path: '',
-    redirectTo: '/app',
+    redirectTo: '/auth',
     pathMatch: 'full',
   },
 ];

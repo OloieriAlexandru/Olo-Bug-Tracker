@@ -3,6 +3,8 @@ package com.olo.olobugtracker.services.implementations;
 import com.olo.olobugtracker.dtos.UserCreateDTO;
 import com.olo.olobugtracker.dtos.UserCredentialsDTO;
 import com.olo.olobugtracker.dtos.UserGetByUsernameDTO;
+import com.olo.olobugtracker.exceptions.GenericDuplicateException;
+import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 import com.olo.olobugtracker.models.User;
 import com.olo.olobugtracker.repositories.UserRepository;
 import com.olo.olobugtracker.services.abstractions.UserService;
@@ -27,6 +29,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Long getUserId(String username) throws GenericNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new GenericNotFoundException("An user with the username \"" + username + "\" doesn't exist!");
+        }
+        return user.getId();
+    }
+
+    @Override
     public UserCredentialsDTO findByUsername(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -36,7 +47,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserGetByUsernameDTO create(UserCreateDTO newUser) {
+    public UserGetByUsernameDTO create(UserCreateDTO newUser) throws GenericDuplicateException {
+        User existentUser = userRepository.findByUsername(newUser.getUsername());
+        if (existentUser != null) {
+            throw new GenericDuplicateException("An user with the username \"" + newUser.getUsername() + "\" already exists!");
+        }
+
         User user = modelMapper.map(newUser, User.class);
         user.setPassword(bCryptEncoder.encode(newUser.getPassword()));
 

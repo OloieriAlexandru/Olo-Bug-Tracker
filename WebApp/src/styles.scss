@@ -184,3 +184,20 @@ template {
 [hidden] {
   display: none;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0d47a1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: darken(#0d47a1, 10);
+}

@@ -2,6 +2,7 @@ package com.olo.olobugtracker.controllers;
 
 import com.olo.olobugtracker.dtos.UserCreateDTO;
 import com.olo.olobugtracker.dtos.UserGetByUsernameDTO;
+import com.olo.olobugtracker.exceptions.GenericDuplicateException;
 import com.olo.olobugtracker.services.abstractions.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class UsersController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<UserGetByUsernameDTO> create(@RequestBody UserCreateDTO user) {
+    public ResponseEntity<UserGetByUsernameDTO> create(@RequestBody UserCreateDTO user) throws GenericDuplicateException {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }
 }

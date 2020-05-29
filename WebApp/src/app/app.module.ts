@@ -16,17 +16,34 @@ import { AuthGuardService } from './services/auth-guard.service';
 import { AuthNotGuardService } from './services/auth-not-guard.service';
 import { UserService } from './services/user.service';
 import { ProjectService } from './services/project.service';
+import { AppService } from './services/app.service';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { HomeComponent } from './pages/home/home.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { BugsComponent } from './pages/bugs/bugs.component';
+import { FormNewProjectComponent } from './components/form-new-project/form-new-project.component';
+import { FormNewBugComponent } from './components/form-new-bug/form-new-bug.component';
+import { CardProjectComponent } from './components/card-project/card-project.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
 }
 
 @NgModule({
-  declarations: [AppComponent, AuthComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    AuthComponent,
+    HomeComponent,
+    NavbarComponent,
+    ProjectsComponent,
+    BugsComponent,
+    FormNewProjectComponent,
+    FormNewBugComponent,
+    CardProjectComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -51,6 +68,7 @@ export function tokenGetter() {
     AuthService,
     AuthGuardService,
     AuthNotGuardService,
+    AppService,
   ],
   bootstrap: [AppComponent],
 })

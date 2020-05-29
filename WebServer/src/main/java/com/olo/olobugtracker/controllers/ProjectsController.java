@@ -28,8 +28,8 @@ public class ProjectsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectGetAllDTO>> findAll() {
-        return new ResponseEntity<>(projectService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<ProjectGetAllDTO>> findAll(@RequestAttribute(value = "userId") Long userId) {
+        return new ResponseEntity<>(projectService.findAll(userId), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -40,8 +40,9 @@ public class ProjectsController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectGetByIdDTO> create(@RequestBody ProjectCreateDTO project) throws GenericDuplicateException {
-        ProjectGetByIdDTO createdProject = projectService.create(project);
+    public ResponseEntity<ProjectGetByIdDTO> create(@RequestBody ProjectCreateDTO project,
+                                                    @RequestAttribute(value = "userId") Long userId) throws GenericDuplicateException {
+        ProjectGetByIdDTO createdProject = projectService.create(project, userId);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(createdProject.getId()).toUri();

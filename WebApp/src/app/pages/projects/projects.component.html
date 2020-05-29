@@ -1,0 +1,29 @@
+<div class="wrapper">
+
+  <div *ngIf="projects && projects.length == 0" class="no-projects-icon-wrapper">
+    <i class="material-icons">
+      sentiment_very_dissatisfied
+    </i>
+    You don't have any projects yet
+  </div>
+
+  <div class="projects-container" *ngIf="projects && projects.length > 0; else loadingBar">
+    <app-card-project *ngFor="let project of projects" [project]="project"></app-card-project>
+  </div>
+
+  <ng-template #loadingBar>
+    <div *ngIf="!projects" class="preloader-wrapper active loading-bar">
+      <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

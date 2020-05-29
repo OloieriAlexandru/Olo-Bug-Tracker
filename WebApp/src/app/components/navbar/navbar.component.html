@@ -1,0 +1,35 @@
+<div class="wrapper">
+  <div class="left">
+    <div class="logo">
+      <span>O</span>lo Bug Tracker
+    </div>
+    <div class="page-select">
+      <select *ngIf="pages" class="browser-default" (change)="onChange($event.target.value)">
+        <option *ngFor="let page of pages" [selected]="page.value == currentPage" [value]="page.value">{{page.display}}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="button waves-effect blue darken-4 btn" (click)="sendClickedNotification()">
+      <i class="material-icons">
+        add
+      </i>
+    </button>
+    <button class="button waves-effect grey lighten-5 btn">
+      <i class="material-icons">
+        settings
+      </i>
+    </button>
+    <button class="button waves-effect grey lighten-5 btn">
+      <i class="material-icons">
+        notifications
+      </i>
+    </button>
+    <button class="button waves-effect grey lighten-5 btn" (click)="logout()">
+      <i class="material-icons">
+        exit_to_app
+      </i>
+    </button>
+  </div>
+</div>

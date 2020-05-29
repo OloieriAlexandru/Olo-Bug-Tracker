@@ -1,0 +1,23 @@
+<div class="form-container">
+  <div class="form-content">
+    <div class="title">
+      Create a new project.
+    </div>
+    <div class="row">
+      <form class="col s12">
+        <div class="input-field col s12">
+          <input id="new-project-name" type="text" [(ngModel)]="newProject.name" [ngModelOptions]="{standalone: true}">
+          <label for="new-project-name">Name</label>
+        </div>
+        <div class="input-field col s12">
+          <textarea class="materialize-textarea" id="new-project-description" [(ngModel)]="newProject.description"
+            [ngModelOptions]="{standalone: true}"> </textarea>
+          <label for="new-project-description">Description</label>
+        </div>
+        <div>
+          <a class="waves-effect blue darken-4 btn" (click)="create()">Create</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

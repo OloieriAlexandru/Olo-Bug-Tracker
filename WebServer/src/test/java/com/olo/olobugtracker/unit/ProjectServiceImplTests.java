@@ -4,8 +4,10 @@ import com.olo.olobugtracker.dtos.ProjectCreateDTO;
 import com.olo.olobugtracker.dtos.ProjectGetByIdDTO;
 import com.olo.olobugtracker.exceptions.GenericDuplicateException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
-import com.olo.olobugtracker.models.Project;
+import com.olo.olobugtracker.models.*;
 import com.olo.olobugtracker.repositories.ProjectRepository;
+import com.olo.olobugtracker.repositories.UserProjectRoleRepository;
+import com.olo.olobugtracker.repositories.UserRepository;
 import com.olo.olobugtracker.services.abstractions.ProjectService;
 import com.olo.olobugtracker.services.implementations.ProjectServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -23,8 +25,10 @@ public class ProjectServiceImplTests {
     @Test
     public void findById_ThrowsException_IfIdNotFound() {
         ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserProjectRoleRepository userProjectRoleRepository = Mockito.mock(UserProjectRoleRepository.class);
         Mockito.when(projectRepository.findById(any())).thenReturn(Optional.empty());
-        ProjectService projectService = new ProjectServiceImpl(projectRepository, new ModelMapper());
+        ProjectService projectService = new ProjectServiceImpl(projectRepository, userRepository, userProjectRoleRepository, new ModelMapper());
 
         Assertions.assertThrows(GenericNotFoundException.class, () -> {
             projectService.findById(10L);
@@ -34,14 +38,16 @@ public class ProjectServiceImplTests {
     @Test
     public void create_ThrowsException_IfDuplicateName() {
         ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserProjectRoleRepository userProjectRoleRepository = Mockito.mock(UserProjectRoleRepository.class);
         Project duplicateProject = new Project();
         Mockito.when(projectRepository.findByName("Duplicate")).thenReturn(duplicateProject);
 
-        ProjectService projectService = new ProjectServiceImpl(projectRepository, new ModelMapper());
+        ProjectService projectService = new ProjectServiceImpl(projectRepository, userRepository, userProjectRoleRepository, new ModelMapper());
 
         ProjectCreateDTO newlyCreatedProject = new ProjectCreateDTO("Duplicate", "Some description");
         Assertions.assertThrows(GenericDuplicateException.class, () -> {
-            projectService.create(newlyCreatedProject);
+            projectService.create(newlyCreatedProject, 1L);
         });
     }
 
@@ -55,9 +61,15 @@ public class ProjectServiceImplTests {
         ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
         Mockito.when(projectRepository.save(any())).thenReturn(returnedProject);
 
-        ProjectService projectService = new ProjectServiceImpl(projectRepository, new ModelMapper());
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(new User(1L)));
 
-        ProjectGetByIdDTO returnedDTO = projectService.create(newlyCreatedProject);
+        UserProjectRoleRepository userProjectRoleRepository = Mockito.mock(UserProjectRoleRepository.class);
+        Mockito.when(userProjectRoleRepository.save(any())).thenReturn(new UserProjectRole(new User(1L), returnedProject, new UserRole(UserRoleEnum.OWNER)));
+
+        ProjectService projectService = new ProjectServiceImpl(projectRepository, userRepository, userProjectRoleRepository, new ModelMapper());
+
+        ProjectGetByIdDTO returnedDTO = projectService.create(newlyCreatedProject, 1L);
         Assertions.assertEquals(returnedDTO, returnedProjectDTO);
     }
 }

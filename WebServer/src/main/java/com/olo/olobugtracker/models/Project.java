@@ -1,14 +1,17 @@
 package com.olo.olobugtracker.models;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
-@Entity(name = "projects")
+@Entity(name = "Project")
+@Table(name = "projects")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +22,13 @@ public class Project {
 
     @Column
     private String description;
+
+    @OneToMany(
+            mappedBy = "project",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<UserProjectRole> users = new ArrayList<>();
 
     public Project() {
     }
@@ -32,5 +42,17 @@ public class Project {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void addUsers(UserProjectRole... userRoles) {
+        users.addAll(Arrays.asList(userRoles));
     }
 }

@@ -12,7 +12,7 @@ export class GenericService {
     return this.http.get<T>(api + url, { headers: this.buildHeaders() });
   }
 
-  public post<T>(api: string, url: string, data?: T): Observable<T> {
+  public post<T>(api: string, url: string, data?: any): Observable<T> {
     return this.http.post<T>(api + url, data, { headers: this.buildHeaders() });
   }
 
