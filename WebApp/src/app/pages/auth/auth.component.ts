@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 import { UserNew } from 'src/app/models/UserNew';
 import { UserCredentials } from 'src/app/models/UserCredentials';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-auth',

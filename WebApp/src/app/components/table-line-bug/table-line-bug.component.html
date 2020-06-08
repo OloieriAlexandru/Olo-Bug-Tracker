@@ -1,0 +1,21 @@
+<div class="bug-line-wrapper">
+  <div class="left">
+    {{bug.status}}
+  </div>
+
+  <div class="mid">
+    <span class="id">
+      #{{bug.id}}:
+    </span>
+    <span class="title">
+      {{bug.title}}
+    </span>
+    <span class="project-name">
+      {{projectName}}
+    </span>
+  </div>
+
+  <div class="right">
+    {{bug.dueDate | date : 'mediumDate'}}
+  </div>
+</div>

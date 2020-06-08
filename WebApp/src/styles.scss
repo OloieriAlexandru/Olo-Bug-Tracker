@@ -185,6 +185,10 @@ template {
   display: none;
 }
 
+//****** App
+
+// Scrollbar
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -200,4 +204,108 @@ template {
 
 ::-webkit-scrollbar-thumb:hover {
   background: darken(#0d47a1, 10);
+}
+
+// Datepicker
+
+.datepicker-date-display {
+  background-color: #0D47A1 !important;
+}
+
+// Add bug/project form
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+  max-width: 600px;
+
+  margin-top: 72px;
+
+  .title {
+    font-size: 36px;
+    font-weight: 600;
+  }
+
+  .row {
+    width: 100%;
+
+    margin-top: 32px;
+
+    .first-el {
+      margin-top: 32px;
+    }
+
+    .radio-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      width: 100%;
+
+      margin-top: 22px;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    form,
+    .input-field {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+
+      label.active.custom {
+        transform: translateY(-30px) scale(0.8) !important;
+      }
+    }
+
+    label {
+      left: 0 !important;
+    }
+
+    textarea.materialize-textarea {
+      height: 80px;
+    }
+
+    .create-button {
+      margin-top: 8px;
+
+      &:last-of-type {
+        margin-left: 8px;
+
+        color: #000;
+      }
+    }
+
+    .date {
+      margin-top: 26px;
+    }
+  }
+}
+
+// Projects/bugs pages
+
+.no-items-icon-wrapper {
+  display: flex;
+  align-items: center;
+
+  i {
+    font-size: 100px;
+
+    margin-right: 20px;
+  }
+
+  font-size: 48px;
 }

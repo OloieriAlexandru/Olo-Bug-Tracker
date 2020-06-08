@@ -15,7 +15,9 @@
           <label for="new-project-description">Description</label>
         </div>
         <div>
-          <a class="waves-effect blue darken-4 btn" (click)="create()">Create</a>
+          <a class="create-button waves-effect blue darken-4 btn" (click)="create(false)">Create</a>
+          <a class="create-button waves-effect light-blue lighten-5 btn" (click)="create(true)">Create and add
+            another</a>
         </div>
       </form>
     </div>

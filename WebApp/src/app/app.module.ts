@@ -18,6 +18,8 @@ import { UserService } from './services/user.service';
 import { ProjectService } from './services/project.service';
 import { AppService } from './services/app.service';
 
+import { BugsFilterPipe } from './pipes/bugs-filter.pipe';
+
 import { AppComponent } from './app.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -27,6 +29,8 @@ import { BugsComponent } from './pages/bugs/bugs.component';
 import { FormNewProjectComponent } from './components/form-new-project/form-new-project.component';
 import { FormNewBugComponent } from './components/form-new-bug/form-new-bug.component';
 import { CardProjectComponent } from './components/card-project/card-project.component';
+import { TableLineBugComponent } from './components/table-line-bug/table-line-bug.component';
+import { BugsProjectsPipe } from './pipes/bugs-projects.pipe';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -43,6 +47,9 @@ export function tokenGetter() {
     FormNewProjectComponent,
     FormNewBugComponent,
     CardProjectComponent,
+    TableLineBugComponent,
+    BugsFilterPipe,
+    BugsProjectsPipe,
   ],
   imports: [
     BrowserModule,

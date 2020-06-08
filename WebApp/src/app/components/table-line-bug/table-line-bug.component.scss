@@ -1,0 +1,58 @@
+.bug-line-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: calC(100% - 24px);
+  height: 48px;
+
+  .left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 200px;
+    height: 40px;
+    font-weight: 600;
+
+    border-radius: 15px;
+    background-color: darken(#e1f5fe, 15);
+  }
+
+  .mid {
+    width: calc(100% - 400px);
+
+    span {
+      font-size: 16px;
+
+      &.id {
+        font-weight: 600;
+      }
+
+      &.title {
+        font-size: 20px;
+        color: #0D47A1;
+      }
+
+      &.project-name {
+        margin-left: 8px;
+
+        font-weight: 600;
+      }
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 120px;
+    height: 40px;
+    font-weight: 600;
+
+    color: #eee;
+    border-radius: 15px;
+    background-color: lighten(#0D47A1, 10);
+  }
+}

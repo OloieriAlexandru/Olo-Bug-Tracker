@@ -44,6 +44,11 @@ export class AuthService {
       return false;
     }
 
-    return !this.jwtHelper.isTokenExpired();
+    if (this.jwtHelper.isTokenExpired()) {
+      localStorage.removeItem('token');
+      return false;
+    }
+
+    return true;
   }
 }

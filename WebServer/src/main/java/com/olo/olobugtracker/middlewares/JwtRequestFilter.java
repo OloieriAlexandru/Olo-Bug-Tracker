@@ -2,6 +2,7 @@ package com.olo.olobugtracker.middlewares;
 
 import com.olo.olobugtracker.services.implementations.JwtUserDetailsService;
 import com.olo.olobugtracker.utils.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,16 +44,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             UserDetails userDetails;
             try {
                 userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
-            } catch (UsernameNotFoundException e) {
+
+                if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+            } catch (UsernameNotFoundException | ExpiredJwtException e) {
                 sendUnauthorizedError(httpServletResponse);
                 return;
-            }
-
-            if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
 

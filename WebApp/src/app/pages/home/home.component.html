@@ -8,6 +8,6 @@
     <app-form-new-project (onCreated)="onProjectCreated($event)"></app-form-new-project>
   </div>
   <div class="form-new" [class.form-open]="newBugFormOpen">
-    <app-form-new-bug></app-form-new-bug>
+    <app-form-new-bug [projects]="userProjects" (onCreated)="onBugCreated($event)"></app-form-new-bug>
   </div>
 </div>

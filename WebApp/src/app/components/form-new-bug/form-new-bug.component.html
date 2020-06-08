@@ -1,3 +1,59 @@
 <div class="form-container">
+  <div class="form-content">
+    <div class="title">
+      Create a new bug.
+    </div>
+    <div class="row">
+      <form class="col s12">
+        <select class="browser-default" (change)="onBugProjectChange($event.target.value)">
+          <option value="">Select a project...</option>
+          <option *ngFor="let project of projects" [selected]="project.id == projectId" [value]="project.id">
+            {{project.name}}
+          </option>
+        </select>
+        <ng-template [ngIf]="projectId">
 
+          <div class="first-el input-field col s12">
+            <input id="new-bug-title" type="text" [(ngModel)]="newBug.title" [ngModelOptions]="{standalone: true}">
+            <label for="new-bug-title">Title for the bug</label>
+          </div>
+
+          <div class="input-field col s12">
+            <textarea class="materialize-textarea" id="new-bug-description" [(ngModel)]="newBug.description"
+              [ngModelOptions]="{standalone: true}"> </textarea>
+            <label for="new-bug-description">Description of the bug</label>
+          </div>
+
+          <div class="input-field col s12 radio-line">
+            <label class="active custom">Bug priority</label>
+            <p *ngFor="let priority of priorities">
+              <label>
+                <input class="with-gap" name="bug-priority" [(ngModel)]="newBug.priority" type="radio"
+                  [value]="priority.value" />
+                <span>{{priority.displayName}}</span>
+              </label>
+            </p>
+          </div>
+
+          <label>Responsible for the bug</label>
+          <select class="browser-default" (change)="onResponsibleChange($event.target.value)">
+            <option *ngFor="let role of userRoles" [selected]="role.value == newBug.userRole" [value]="role.value">
+              {{role.displayName}}
+            </option>
+          </select>
+
+          <div class="input-field col date s12">
+            <input id="new-bug-due-date" type="text" class="datepicker" (change)="onDueDateChange($event.target.value)">
+            <label for="new-bug-due-date">Due date</label>
+          </div>
+
+          <div>
+            <a class="create-button waves-effect blue darken-4 btn" (click)="create(false)">Create</a>
+            <a class="create-button waves-effect light-blue lighten-5 btn" (click)="create(true)">Create and add
+              another</a>
+          </div>
+        </ng-template>
+      </form>
+    </div>
+  </div>
 </div>

@@ -30,6 +30,14 @@ public class Project {
     )
     private List<UserProjectRole> users = new ArrayList<>();
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "bug_id")
+    private List<Bug> bugs = new ArrayList<>();
+
     public Project() {
     }
 
@@ -48,11 +56,23 @@ public class Project {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void addUsers(UserProjectRole... userRoles) {
         users.addAll(Arrays.asList(userRoles));
+    }
+
+    public void addBugs(Bug... newBugs) {
+        bugs.addAll(Arrays.asList(newBugs));
+    }
+
+    public List<Bug> getBugs() {
+        return bugs;
     }
 }

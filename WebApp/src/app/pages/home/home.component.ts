@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
 import { AuthService } from 'src/app/services/auth.service';
-import { ProjectGetAll } from 'src/app/models/ProjectGetAll';
 import { AppService } from 'src/app/services/app.service';
+import { ProjectService } from 'src/app/services/project.service';
+
+import { ProjectGetAll } from 'src/app/models/ProjectGetAll';
 
 @Component({
   selector: 'app-home',
@@ -19,11 +22,14 @@ export class HomeComponent implements OnInit {
   public newProjectFormOpen: boolean = false;
   public newBugFormOpen: boolean = false;
 
+  public userProjects: ProjectGetAll[] = null;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private appService: AppService
+    private appService: AppService,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
@@ -37,20 +43,56 @@ export class HomeComponent implements OnInit {
 
   public openForm() {
     if (this.currentPage == this.pages[0].value) {
-      this.newProjectFormOpen = !this.newProjectFormOpen;
+      this.openNewProjectForm();
     } else if (this.currentPage == this.pages[1].value) {
+      this.openNewBugForm();
+    }
+  }
+
+  private openNewProjectForm(): void {
+    this.newProjectFormOpen = !this.newProjectFormOpen;
+  }
+
+  private openNewBugForm(): void {
+    if (!this.newBugFormOpen) {
+      this.projectService.getAll().subscribe((projects: ProjectGetAll[]) => {
+        this.userProjects = projects;
+        this.newBugFormOpen = !this.newBugFormOpen;
+      });
+    } else {
       this.newBugFormOpen = !this.newBugFormOpen;
     }
   }
 
   public onOptionChanged(newOption) {
+    this.resetState();
     this.currentPage = newOption;
     this.router.navigate(['./' + newOption], { relativeTo: this.route });
   }
 
-  public onProjectCreated(newProject: ProjectGetAll) {
-    this.appService.sendCreatedProjectNotification(newProject);
+  private resetState(): void {
     this.newProjectFormOpen = false;
+    this.newBugFormOpen = false;
+  }
+
+  public onProjectCreated(newProject: any) {
+    this.appService.sendCreatedProjectNotification(newProject.project);
+
+    if (newProject.close) {
+      this.newProjectFormOpen = false;
+    }
+  }
+
+  public onBugCreated(newBugInfo: any) {
+    this.appService.sendCreatedBugNotification({
+      projectId: newBugInfo.projectInfo.id,
+      projectName: newBugInfo.projectInfo.name,
+      bug: newBugInfo.bug,
+    });
+
+    if (newBugInfo.close) {
+      this.newBugFormOpen = false;
+    }
   }
 
   public logout() {

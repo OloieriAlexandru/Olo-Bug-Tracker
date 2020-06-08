@@ -1,11 +1,67 @@
 <div class="wrapper">
 
-  <div class="bugs-container" *ngIf="bugs; else loadingBar">
+  <div *ngIf="projectBugs && projectBugs.length == 0" class="no-items-icon-wrapper">
+    <i class="material-icons">
+      sentiment_very_satisfied
+    </i>
+    You don't have any bugs!
+  </div>
+
+  <div class="bugs-container" *ngIf="projectBugs && projectBugs.length > 0; else loadingBar">
+
+    <div class="bugs-table-header">
+      <div class="header-left">
+
+      </div>
+
+      <div class="header-mid">
+        <span>
+          Bugs:
+        </span>
+        <select class="browser-default" (change)="onProjectChange($event.target.value)">
+          <option value="" [selected]="''== filterProjectName">All Projects</option>
+          <option *ngFor="let projectBug of projectBugs" [selected]="projectBug.name == filterProjectName"
+            [value]="projectBug.name">{{projectBug.name}}
+          </option>
+        </select>
+      </div>
+
+      <div class="header-right">
+
+      </div>
+    </div>
+
+    <div class="bugs-table-filters">
+
+      <div class="filters">
+        <div class="filter">
+          <span>Viewing:</span>
+          <select class="browser-default" (change)="onBugStatusChange($event.target.value)">
+            <option value="" [selected]="''== filterBugStatus">Your active bugs</option>
+            <option *ngFor="let bugStatus of bugsStatuses" [selected]="bugStatus.value == filterBugStatus"
+              [value]="bugStatus.value">{{bugStatus.displayName}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bugs-count">
+
+      </div>
+
+    </div>
+
+    <div class="bugs-table-body">
+      <ng-container *ngFor="let projectBug of projectBugs | bugsFilter:filterProjectName">
+        <app-table-line-bug *ngFor="let bug of projectBug.bugs" [bug]="bug" [projectName]="projectBug.name">
+        </app-table-line-bug>
+      </ng-container>
+    </div>
 
   </div>
 
   <ng-template #loadingBar>
-    <div class="preloader-wrapper active loading-bar">
+    <div *ngIf="!projectBugs" class="preloader-wrapper active loading-bar">
       <div class="spinner-layer spinner-blue-only">
         <div class="circle-clipper left">
           <div class="circle"></div>
