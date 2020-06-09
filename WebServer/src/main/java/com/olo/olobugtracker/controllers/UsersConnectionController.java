@@ -3,6 +3,7 @@ package com.olo.olobugtracker.controllers;
 import com.olo.olobugtracker.dtos.GenericSuccessDTO;
 import com.olo.olobugtracker.dtos.UsersConnectionGetAllDTO;
 import com.olo.olobugtracker.dtos.UsersConnectionInvitationGetAllDTO;
+import com.olo.olobugtracker.dtos.UsersConnectionUserInfoDTO;
 import com.olo.olobugtracker.exceptions.GenericBadRequestException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 import com.olo.olobugtracker.exceptions.NotFoundUserException;
@@ -43,6 +44,19 @@ public class UsersConnectionController {
         return new ResponseEntity<>(usersConnectionService.findAllInvitations(userId), HttpStatus.OK);
     }
 
+    @GetMapping("{userId}/connections/suggestions")
+    public ResponseEntity<List<UsersConnectionUserInfoDTO>> getSuggestions(@RequestParam(required = false) Long limit, @RequestAttribute(value = "userId") Long tokenUserId, @PathVariable Long userId)
+            throws GenericBadRequestException, NotFoundUserException {
+        if (!userId.equals(tokenUserId)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        if (limit == null) {
+            limit = 5L;
+        }
+
+        return new ResponseEntity<>(usersConnectionService.getConnectionsSuggestions(userId, limit), HttpStatus.OK);
+    }
+
     @PostMapping("{receiverId}/connections/invitations")
     public GenericSuccessDTO createInvitation(@PathVariable Long receiverId, @RequestAttribute(value = "userId") Long userId) throws NotFoundUserException {
         this.usersConnectionService.createInvitation(userId, receiverId);
@@ -51,7 +65,8 @@ public class UsersConnectionController {
     }
 
     @PostMapping("{receiverId}/connections/invitations/{id}")
-    public ResponseEntity<GenericSuccessDTO> acceptInvitation(@PathVariable Long receiverId, @RequestAttribute(value = "userId") Long userId, @PathVariable Long id) throws GenericNotFoundException, GenericBadRequestException {
+    public ResponseEntity<GenericSuccessDTO> acceptInvitation(@PathVariable Long receiverId, @RequestAttribute(value = "userId") Long userId, @PathVariable Long id)
+            throws GenericNotFoundException, GenericBadRequestException {
         if (!receiverId.equals(userId)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

@@ -35,7 +35,7 @@ public class Project {
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
-    @JoinColumn(name = "bug_id")
+    @JoinColumn(name = "project_id")
     private List<Bug> bugs = new ArrayList<>();
 
     public Project() {

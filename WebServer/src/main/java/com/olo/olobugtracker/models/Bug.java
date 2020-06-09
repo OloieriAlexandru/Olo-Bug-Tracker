@@ -1,6 +1,7 @@
 package com.olo.olobugtracker.models;
 
 import com.olo.olobugtracker.dtos.BugCreateDTO;
+import com.olo.olobugtracker.dtos.BugUpdateDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +48,15 @@ public class Bug {
         this.title = newBug.getTitle();
         this.description = newBug.getDescription();
         this.dueDate = newBug.getDueDate();
+    }
+
+    public void updateInformation(BugUpdateDTO updatedBug) {
+        this.status = new BugStatus(updatedBug.getStatus());
+        this.priority = new BugPriority(updatedBug.getPriority());
+        this.userRole = new BugUserRole(updatedBug.getUserRole());
+        this.title = updatedBug.getTitle();
+        this.description = updatedBug.getDescription();
+        this.dueDate = updatedBug.getDueDate();
     }
 
     public Long getId() {

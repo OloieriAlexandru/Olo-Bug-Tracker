@@ -7,20 +7,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserCreateDTO {
+public class UserUpdateDTO {
+    private Long id;
+
     private String username;
 
-    private String password;
+    private String email;
 
     private String firstName;
 
     private String lastName;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
+    public Long getId() {
+        return id;
     }
 }

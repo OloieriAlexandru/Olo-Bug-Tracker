@@ -3,8 +3,10 @@ package com.olo.olobugtracker.services.implementations;
 import com.olo.olobugtracker.dtos.UserCreateDTO;
 import com.olo.olobugtracker.dtos.UserCredentialsDTO;
 import com.olo.olobugtracker.dtos.UserGetByUsernameDTO;
+import com.olo.olobugtracker.dtos.UserUpdateDTO;
 import com.olo.olobugtracker.exceptions.GenericDuplicateException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
+import com.olo.olobugtracker.exceptions.NotFoundUserException;
 import com.olo.olobugtracker.models.User;
 import com.olo.olobugtracker.repositories.UserRepository;
 import com.olo.olobugtracker.services.abstractions.UserService;
@@ -12,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,6 +50,13 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserCredentialsDTO.class);
     }
 
+    /**
+     * Creates a new user
+     *
+     * @param newUser The information of the newly created user
+     * @return An user DTO
+     * @throws GenericDuplicateException When a user with the same username already exists
+     */
     @Override
     public UserGetByUsernameDTO create(UserCreateDTO newUser) throws GenericDuplicateException {
         User existentUser = userRepository.findByUsername(newUser.getUsername());
@@ -59,5 +70,23 @@ public class UserServiceImpl implements UserService {
         user = userRepository.save(user);
 
         return modelMapper.map(user, UserGetByUsernameDTO.class);
+    }
+
+    /**
+     * Updates the information of the user identified by 'updatedUser.id' id
+     *
+     * @param updatedUser The updated user information
+     * @throws NotFoundUserException When a user with the 'updatedUser.id' id doesn't exist
+     */
+    @Override
+    public void update(UserUpdateDTO updatedUser) throws NotFoundUserException {
+        Optional<User> optionalUser = userRepository.findById(updatedUser.getId());
+
+        if (!optionalUser.isPresent()) {
+            throw new NotFoundUserException(updatedUser.getId());
+        }
+
+        User user = optionalUser.get();
+        modelMapper.map(updatedUser, user);
     }
 }

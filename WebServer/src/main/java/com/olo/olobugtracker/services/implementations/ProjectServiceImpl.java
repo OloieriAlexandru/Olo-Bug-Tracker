@@ -40,6 +40,12 @@ public class ProjectServiceImpl implements ProjectService {
         this.userProjectRoleRepository = userProjectRoleRepository;
     }
 
+    /**
+     * Returns all the projects to which the user identified by 'userId' is assigned
+     *
+     * @param userId The user that is assigned to the returned projects
+     * @return A list of project DTOs
+     */
     @Override
     public List<ProjectGetAllDTO> findAll(Long userId) {
         Optional<User> userOpt = userRepository.findById(userId);
@@ -61,6 +67,13 @@ public class ProjectServiceImpl implements ProjectService {
         return resultProjects;
     }
 
+    /**
+     * Returns a project by id
+     *
+     * @param id The id of the project
+     * @return The project that has the specified id
+     * @throws GenericNotFoundException The project doesn't exist in the repository
+     */
     @Override
     public ProjectGetByIdDTO findById(Long id) throws GenericNotFoundException {
         Optional<Project> project = projectRepository.findById(id);
@@ -72,6 +85,14 @@ public class ProjectServiceImpl implements ProjectService {
         return modelMapper.map(project.get(), ProjectGetByIdDTO.class);
     }
 
+    /**
+     * Creates a project owned by the user identified by 'userId'
+     *
+     * @param newProject The project information
+     * @param userId     The owner of the newly created project
+     * @return A project DTO
+     * @throws GenericDuplicateException When a project with the same name already exists
+     */
     @Override
     @Transactional
     public ProjectGetByIdDTO create(ProjectCreateDTO newProject, Long userId) throws GenericDuplicateException {
@@ -94,6 +115,13 @@ public class ProjectServiceImpl implements ProjectService {
         return modelMapper.map(project, ProjectGetByIdDTO.class);
     }
 
+    /**
+     * Updates the project identified by 'id' id
+     *
+     * @param id             The id of the updated project
+     * @param updatedProject The updated information of the project
+     * @throws GenericNotFoundException When there is no project with the specified id
+     */
     @Override
     public void update(Long id, ProjectUpdateDTO updatedProject) throws GenericNotFoundException {
         Optional<Project> projectOpt = projectRepository.findById(id);
@@ -106,6 +134,12 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
+    /**
+     * Deletes a project identified by 'id' id
+     *
+     * @param id The id of the deleted project
+     * @throws GenericNotFoundException When there is no project with the specified id
+     */
     @Override
     public void delete(Long id) throws GenericNotFoundException {
         if (!projectRepository.existsById(id)) {

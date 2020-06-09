@@ -3,7 +3,10 @@ package com.olo.olobugtracker.controllers;
 import com.olo.olobugtracker.dtos.BugCreateDTO;
 import com.olo.olobugtracker.dtos.BugGetAllProjectInfoDTO;
 import com.olo.olobugtracker.dtos.BugGetByIdDTO;
+import com.olo.olobugtracker.dtos.BugUpdateDTO;
+import com.olo.olobugtracker.exceptions.GenericBadRequestException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
+import com.olo.olobugtracker.exceptions.NotFoundBugException;
 import com.olo.olobugtracker.services.abstractions.BugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,22 @@ public class BugsController {
     @GetMapping("bugs")
     public ResponseEntity<List<BugGetAllProjectInfoDTO>> findAll(@RequestAttribute(value = "userId") Long userId) {
         return new ResponseEntity<>(bugService.findAll(userId), HttpStatus.OK);
+    }
+
+    @PutMapping("bugs/{bugId}")
+    public ResponseEntity.HeadersBuilder<?> update(@RequestBody BugUpdateDTO updatedBug, @PathVariable Long bugId) throws GenericBadRequestException, NotFoundBugException {
+        if (!bugId.equals(updatedBug.getId())) {
+            throw new GenericBadRequestException("The id of the bug object doesn't match the request path bug id!");
+        }
+
+        bugService.update(updatedBug);
+        return ResponseEntity.noContent();
+    }
+
+    @DeleteMapping("bugs/{bugId}")
+    public ResponseEntity.HeadersBuilder<?> delete(@PathVariable Long bugId) throws NotFoundBugException {
+        bugService.delete(bugId);
+        return ResponseEntity.noContent();
     }
 
     @GetMapping("projects/{projectId}/bugs")

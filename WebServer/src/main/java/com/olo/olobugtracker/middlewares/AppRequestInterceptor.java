@@ -13,6 +13,9 @@ public class AppRequestInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * Catches all the incoming requests and, if the 'Authorization' header is presents, creates a request attribute, the id of the user identified by the JWT token
+     */
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {

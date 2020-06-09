@@ -16,6 +16,13 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private UserService userService;
 
+    /**
+     * A method used for the JWT authentification
+     *
+     * @param username The username of the user that has to be authenticated
+     * @return A UserDetails object
+     * @throws UsernameNotFoundException When there is no user with the specified username
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserCredentialsDTO userCredentials = userService.findByUsername(username);
