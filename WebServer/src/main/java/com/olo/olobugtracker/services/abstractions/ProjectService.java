@@ -1,9 +1,6 @@
 package com.olo.olobugtracker.services.abstractions;
 
-import com.olo.olobugtracker.dtos.ProjectCreateDTO;
-import com.olo.olobugtracker.dtos.ProjectGetAllDTO;
-import com.olo.olobugtracker.dtos.ProjectGetByIdDTO;
-import com.olo.olobugtracker.dtos.ProjectUpdateDTO;
+import com.olo.olobugtracker.dtos.*;
 import com.olo.olobugtracker.exceptions.GenericDuplicateException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 
@@ -19,4 +16,6 @@ public interface ProjectService {
     void update(Long id, ProjectUpdateDTO updatedProject) throws GenericNotFoundException;
 
     void delete(Long id) throws GenericNotFoundException;
+
+    void addUserOnProject(UserRoleCreateDTO createdRole, Long projectId, Long ownerId) throws GenericNotFoundException;
 }

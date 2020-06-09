@@ -1,9 +1,6 @@
 package com.olo.olobugtracker.services.implementations;
 
-import com.olo.olobugtracker.dtos.ProjectCreateDTO;
-import com.olo.olobugtracker.dtos.ProjectGetAllDTO;
-import com.olo.olobugtracker.dtos.ProjectGetByIdDTO;
-import com.olo.olobugtracker.dtos.ProjectUpdateDTO;
+import com.olo.olobugtracker.dtos.*;
 import com.olo.olobugtracker.exceptions.GenericDuplicateException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 import com.olo.olobugtracker.exceptions.NotFoundProjectException;
@@ -23,19 +20,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service("projectService")
-public class ProjectServiceImpl implements ProjectService {
+public class ProjectServiceImpl extends BaseService implements ProjectService {
     private UserProjectRoleRepository userProjectRoleRepository;
 
     private ProjectRepository projectRepository;
-
-    private UserRepository userRepository;
 
     private ModelMapper modelMapper;
 
     @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository, UserRepository userRepository, UserProjectRoleRepository userProjectRoleRepository, ModelMapper modelMapper) {
+        super(userRepository);
         this.projectRepository = projectRepository;
-        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.userProjectRoleRepository = userProjectRoleRepository;
     }
@@ -147,5 +142,45 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         projectRepository.deleteById(id);
+    }
+
+    /**
+     * Adds a user on a project, with a specific role
+     *
+     * @param createdRole Information about the newly created role
+     * @param projectId   The id of the project on which the user role is added
+     * @param ownerId     The id of the owner of the project
+     * @throws GenericNotFoundException When an user, a project doesn't exist in the repository
+     */
+    @Override
+    public void addUserOnProject(UserRoleCreateDTO createdRole, Long projectId, Long ownerId) throws GenericNotFoundException {
+        Project project = getProjectFromRepositoryById(projectId);
+        User owner = getUserFromRepositoryById(ownerId);
+        User user = getUserFromRepositoryById(createdRole.getUserId());
+
+        UserRole ownerRole = new UserRole(UserRoleEnum.OWNER);
+        Optional<UserProjectRole> userProjectRole = userProjectRoleRepository.findByUserAndRole(owner, ownerRole);
+        if (!userProjectRole.isPresent()) {
+            throw new GenericNotFoundException("The project who made the request is not the owner of the project!");
+        }
+
+        UserRole newRole = new UserRole(createdRole.getRole());
+        UserProjectRole newUserRole = new UserProjectRole(user, project, newRole);
+        userProjectRoleRepository.save(newUserRole);
+    }
+
+    /**
+     * Returns a project from the repository
+     *
+     * @param projectId The id of the project
+     * @return The project identified by 'projectId'
+     * @throws NotFoundProjectException When the project doesn't exist in the repository
+     */
+    private Project getProjectFromRepositoryById(Long projectId) throws NotFoundProjectException {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (!optionalProject.isPresent()) {
+            throw new NotFoundProjectException(projectId);
+        }
+        return optionalProject.get();
     }
 }

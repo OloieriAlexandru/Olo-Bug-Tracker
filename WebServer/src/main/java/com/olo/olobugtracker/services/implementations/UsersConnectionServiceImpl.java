@@ -22,20 +22,18 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-public class UsersConnectionServiceImpl implements UsersConnectionService {
+public class UsersConnectionServiceImpl extends BaseService implements UsersConnectionService {
     private UsersConnectionInvitationRepository usersConnectionInvitationRepository;
 
     private UsersConnectionRepository usersConnectionRepository;
-
-    private UserRepository userRepository;
 
     @Autowired
     public UsersConnectionServiceImpl(UsersConnectionInvitationRepository usersConnectionInvitationRepository,
                                       UsersConnectionRepository usersConnectionRepository,
                                       UserRepository userRepository) {
+        super(userRepository);
         this.usersConnectionInvitationRepository = usersConnectionInvitationRepository;
         this.usersConnectionRepository = usersConnectionRepository;
-        this.userRepository = userRepository;
     }
 
     /**
@@ -219,22 +217,5 @@ public class UsersConnectionServiceImpl implements UsersConnectionService {
         usersConnectionRepository.save(connection);
 
         usersConnectionInvitationRepository.delete(invitation);
-    }
-
-    /**
-     * Returns an user from the repository
-     *
-     * @param userId The id of the user
-     * @return The user identified by 'userId' id
-     * @throws NotFoundUserException The user doesn't exist in the repository
-     */
-    private User getUserFromRepositoryById(Long userId) throws NotFoundUserException {
-        Optional<User> userOptional = userRepository.findById(userId);
-
-        if (!userOptional.isPresent()) {
-            throw new NotFoundUserException(userId);
-        }
-
-        return userOptional.get();
     }
 }

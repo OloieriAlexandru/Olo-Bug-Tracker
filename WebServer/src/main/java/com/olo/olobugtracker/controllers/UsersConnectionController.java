@@ -8,6 +8,8 @@ import com.olo.olobugtracker.exceptions.GenericBadRequestException;
 import com.olo.olobugtracker.exceptions.GenericNotFoundException;
 import com.olo.olobugtracker.exceptions.NotFoundUserException;
 import com.olo.olobugtracker.services.abstractions.UsersConnectionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value = "Endpoints for operations on user connections and user connection invitations")
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1/users")
@@ -27,6 +30,7 @@ public class UsersConnectionController {
     }
 
     @GetMapping("{userId}/connections")
+    @ApiOperation("Returns all the connections of a user")
     public ResponseEntity<List<UsersConnectionGetAllDTO>> getAllConnections(@PathVariable Long userId, @RequestAttribute(value = "usedId") Long tokenUserId) throws NotFoundUserException {
         if (!userId.equals(tokenUserId)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -36,6 +40,7 @@ public class UsersConnectionController {
     }
 
     @GetMapping("{userId}/connections/invitations")
+    @ApiOperation("Returns all the connection invitations of a user")
     public ResponseEntity<List<UsersConnectionInvitationGetAllDTO>> getAllInvitations(@PathVariable Long userId, @RequestAttribute(value = "userId") Long tokenUserId) throws NotFoundUserException {
         if (!userId.equals(tokenUserId)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -45,6 +50,7 @@ public class UsersConnectionController {
     }
 
     @GetMapping("{userId}/connections/suggestions")
+    @ApiOperation("Returns connection suggestions for a user")
     public ResponseEntity<List<UsersConnectionUserInfoDTO>> getSuggestions(@RequestParam(required = false) Long limit, @RequestAttribute(value = "userId") Long tokenUserId, @PathVariable Long userId)
             throws GenericBadRequestException, NotFoundUserException {
         if (!userId.equals(tokenUserId)) {
@@ -58,6 +64,7 @@ public class UsersConnectionController {
     }
 
     @PostMapping("{receiverId}/connections/invitations")
+    @ApiOperation("Creates a connection invitation")
     public GenericSuccessDTO createInvitation(@PathVariable Long receiverId, @RequestAttribute(value = "userId") Long userId) throws NotFoundUserException {
         this.usersConnectionService.createInvitation(userId, receiverId);
 
@@ -65,6 +72,7 @@ public class UsersConnectionController {
     }
 
     @PostMapping("{receiverId}/connections/invitations/{id}")
+    @ApiOperation("Accepts a connection invitation")
     public ResponseEntity<GenericSuccessDTO> acceptInvitation(@PathVariable Long receiverId, @RequestAttribute(value = "userId") Long userId, @PathVariable Long id)
             throws GenericNotFoundException, GenericBadRequestException {
         if (!receiverId.equals(userId)) {

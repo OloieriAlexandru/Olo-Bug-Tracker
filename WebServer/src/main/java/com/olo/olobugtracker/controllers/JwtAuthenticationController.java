@@ -5,6 +5,7 @@ import com.olo.olobugtracker.dtos.JwtResponseDTO;
 import com.olo.olobugtracker.services.abstractions.UserService;
 import com.olo.olobugtracker.services.implementations.JwtUserDetailsService;
 import com.olo.olobugtracker.utils.JwtTokenUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+@ApiOperation(value = "Endpoints for JWT authentification")
 @CrossOrigin
 @RestController
 @RequestMapping("/api/v1")
@@ -31,6 +33,7 @@ public class JwtAuthenticationController {
     private JwtUserDetailsService userDetailsService;
 
     @PostMapping("auth")
+    @ApiOperation(value = "Creates a JWT token")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequestDTO authRequest) throws Exception {
         authenticate(authRequest.getUsername(), authRequest.getPassword());
 
