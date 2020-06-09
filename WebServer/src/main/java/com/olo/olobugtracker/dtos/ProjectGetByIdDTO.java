@@ -9,7 +9,9 @@ import java.util.Objects;
 @Setter
 public class ProjectGetByIdDTO {
     private Long id;
+
     private String name;
+
     private String description;
 
     public ProjectGetByIdDTO() {

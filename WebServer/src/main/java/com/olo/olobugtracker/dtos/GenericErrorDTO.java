@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class GenericErrorDTO {
     private String message;
+
     private LocalDateTime timestamp;
 
     public GenericErrorDTO(String message) {

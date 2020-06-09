@@ -27,6 +27,9 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @Column(length = 64, name = "email")
+    private String email;
+
     @Column(length = 30, name = "first_name")
     private String firstName;
 
@@ -50,6 +53,14 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     @Override

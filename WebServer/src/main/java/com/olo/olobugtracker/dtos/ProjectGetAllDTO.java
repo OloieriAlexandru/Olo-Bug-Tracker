@@ -9,7 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProjectGetAllDTO {
     private Long id;
+
     private String name;
+
     private String shortDescription;
 
     public void setShortDescription(String shortDescription) {
