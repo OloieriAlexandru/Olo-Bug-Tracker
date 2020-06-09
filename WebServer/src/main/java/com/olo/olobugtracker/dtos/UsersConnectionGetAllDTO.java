@@ -13,6 +13,7 @@ public class UsersConnectionGetAllDTO {
     private UsersConnectionUserInfoDTO userInfo;
 
     public UsersConnectionGetAllDTO(Long id, UsersConnectionUserInfoDTO userInfo) {
+        this.id = id;
         this.userInfo = userInfo;
     }
 }

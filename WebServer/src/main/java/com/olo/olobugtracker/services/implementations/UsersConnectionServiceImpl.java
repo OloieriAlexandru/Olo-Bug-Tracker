@@ -123,6 +123,10 @@ public class UsersConnectionServiceImpl extends BaseService implements UsersConn
         }
         frequenciesArray.sort((o1, o2) -> -Integer.compare(o1.getFirst(), o2.getFirst()));
 
+        for (Pair<Integer, User> suggestion : frequenciesArray) {
+            result.add(suggestion.getSecond());
+        }
+
         return result;
     }
 

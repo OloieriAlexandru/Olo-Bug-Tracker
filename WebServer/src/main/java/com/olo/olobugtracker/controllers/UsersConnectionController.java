@@ -31,7 +31,7 @@ public class UsersConnectionController {
 
     @GetMapping("{userId}/connections")
     @ApiOperation("Returns all the connections of a user")
-    public ResponseEntity<List<UsersConnectionGetAllDTO>> getAllConnections(@PathVariable Long userId, @RequestAttribute(value = "usedId") Long tokenUserId) throws NotFoundUserException {
+    public ResponseEntity<List<UsersConnectionGetAllDTO>> getAllConnections(@PathVariable Long userId, @RequestAttribute(value = "userId") Long tokenUserId) throws NotFoundUserException {
         if (!userId.equals(tokenUserId)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

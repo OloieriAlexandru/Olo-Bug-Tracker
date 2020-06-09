@@ -12,22 +12,23 @@ import com.olo.olobugtracker.services.abstractions.ProjectService;
 import com.olo.olobugtracker.services.implementations.ProjectServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class ProjectServiceImplTests {
+public class ProjectServiceTests {
 
     @Test
     public void findById_ThrowsException_IfIdNotFound() {
-        ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserProjectRoleRepository userProjectRoleRepository = Mockito.mock(UserProjectRoleRepository.class);
-        Mockito.when(projectRepository.findById(any())).thenReturn(Optional.empty());
+        ProjectRepository projectRepository = mock(ProjectRepository.class);
+        UserRepository userRepository = mock(UserRepository.class);
+        UserProjectRoleRepository userProjectRoleRepository = mock(UserProjectRoleRepository.class);
+        when(projectRepository.findById(any())).thenReturn(Optional.empty());
         ProjectService projectService = new ProjectServiceImpl(projectRepository, userRepository, userProjectRoleRepository, new ModelMapper());
 
         Assertions.assertThrows(GenericNotFoundException.class, () -> {
@@ -37,11 +38,11 @@ public class ProjectServiceImplTests {
 
     @Test
     public void create_ThrowsException_IfDuplicateName() {
-        ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserProjectRoleRepository userProjectRoleRepository = Mockito.mock(UserProjectRoleRepository.class);
+        ProjectRepository projectRepository = mock(ProjectRepository.class);
+        UserRepository userRepository = mock(UserRepository.class);
+        UserProjectRoleRepository userProjectRoleRepository = mock(UserProjectRoleRepository.class);
         Project duplicateProject = new Project();
-        Mockito.when(projectRepository.findByName("Duplicate")).thenReturn(duplicateProject);
+        when(projectRepository.findByName("Duplicate")).thenReturn(duplicateProject);
 
         ProjectService projectService = new ProjectServiceImpl(projectRepository, userRepository, userProjectRoleRepository, new ModelMapper());
 
@@ -58,14 +59,14 @@ public class ProjectServiceImplTests {
         ProjectCreateDTO newlyCreatedProject = new ProjectCreateDTO();
         BeanUtils.copyProperties(returnedProject, newlyCreatedProject);
 
-        ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
-        Mockito.when(projectRepository.save(any())).thenReturn(returnedProject);
+        ProjectRepository projectRepository = mock(ProjectRepository.class);
+        when(projectRepository.save(any())).thenReturn(returnedProject);
 
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        Mockito.when(userRepository.findById(any())).thenReturn(Optional.of(new User(1L)));
+        UserRepository userRepository = mock(UserRepository.class);
+        when(userRepository.findById(any())).thenReturn(Optional.of(new User(1L)));
 
-        UserProjectRoleRepository userProjectRoleRepository = Mockito.mock(UserProjectRoleRepository.class);
-        Mockito.when(userProjectRoleRepository.save(any())).thenReturn(new UserProjectRole(new User(1L), returnedProject, new UserRole(UserRoleEnum.OWNER)));
+        UserProjectRoleRepository userProjectRoleRepository = mock(UserProjectRoleRepository.class);
+        when(userProjectRoleRepository.save(any())).thenReturn(new UserProjectRole(new User(1L), returnedProject, new UserRole(UserRoleEnum.OWNER)));
 
         ProjectService projectService = new ProjectServiceImpl(projectRepository, userRepository, userProjectRoleRepository, new ModelMapper());
 
